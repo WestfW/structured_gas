@@ -1,5 +1,7 @@
+.nolist
 #include <avr/io.h>
-#include "struct_asm.S"	
+.list
+#include "struct_gas.S"	
 /*	_struct_init */
 	
 main:	cli
@@ -64,6 +66,16 @@ DELAYTEST:
 	  _while nz
 	ret
 
+LOOPWBREAKTEST:
+	clr r10
+	_do
+	  ld r17, X+
+	  and r17, r17
+	  _break e
+	  inc r10
+	  _while always
+	ret
+	
 
 ;;; string length
 ;;; pointer entry in X, output in r10

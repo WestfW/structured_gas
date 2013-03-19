@@ -1,4 +1,4 @@
-/* struct_asm.S
+/* struct_gas.S
  * Feb 2013 by Bill Westfield (westfw@westfw.info)
  * Structured Assembly macros for the Gnu assembler.
  * These permit the use of _if _else _endif without the use of explicit labels.
@@ -6,12 +6,16 @@
 
 /*
  *
- * Based on PDP10 Macro macros that appeared at my highschool back in the 1970s,
- * published in some DEC10-related news media.  I don't even remember the details.
+	
+ * Based on PDP10 Macro macros that appeared at my highschool back in the
+ * 1970s, published in some DEC10-related news media.  I don't even
+ * remember the details.
+ *	
  * Similar but more complex macros occur in DEC's MACSYM.MAC file,
  *  and struct.mac on DECUS decus/20-0143 by Robert Nix.
  *
  * Here are the original (macro-10) definitions that followed me from HS:
+	
 
 DEFINE %LOOP	<SAVCTR==SAVCTR+1
 		 %STNAM(SAV,\SAVCTR,.)>
@@ -48,13 +52,15 @@ DEFINE %STNAM(VAR,IND,VAL) <VAR'IND=VAL>
 	.nolist
 
 #ifdef __AVR__
-#include "struct_asm_avr.S"
+#include "struct_gas_avr.S"
 #elif __MSP430__
-#include "struct_asm_msp430.S"
+#include "struct_gas_msp430.S"
 #elif __x86_64__
-#include "struct_asm_x86.S"
+#include "struct_gas_x86.S"
 #elif __m68k__
-#include "struct_asm_m68k.S"
+#include "struct_gas_m68k.S"
+#else
+#error No recognized Architecture for struct_gas.S
 #endif
 	
 .altmacro
@@ -127,21 +133,27 @@ DEFINE %STNAM(VAR,IND,VAL) <VAR'IND=VAL>
 ;;; Looping macros.  "until cc" will generate a jmp_not_cc backward,
 ;;; and "while cc" will generate a jmp_cc backward.
 .macro _do
-	.set __ST_LPNEST, __ST_LPNEST+1
+	.set __ST_LPNEST, __ST_LPNEST+2
 	_st_label %__ST_LPNEST, 20
 	.endm
 	
 .macro _until cond
 	_st_mkjmp _st_jmp_not_\cond, %__ST_LPNEST, b, 20
-	.set __ST_LPNEST, __ST_LPNEST-1
+	_st_label %__ST_LPNEST+1, 20
+	.set __ST_LPNEST, __ST_LPNEST-2
 	.endm
 
 .macro _while cond
 	_st_mkjmp _st_jmp_\cond, %__ST_LPNEST, b, 20
-	.set __ST_LPNEST, __ST_LPNEST-1
+	_st_label %__ST_LPNEST+1, 20
+	.set __ST_LPNEST, __ST_LPNEST-2
+	.endm
+
+.macro _break cond=always
+	_st_mkjmp _st_jmp_\cond, %(__ST_LPNEST+1), f, 20
 	.endm
 
 ;;; Nesting level initialization
 	.set __ST_IFNEST, -2
-	.set __ST_LPNEST, -1
+	.set __ST_LPNEST, -2
 .list
