@@ -139,17 +139,17 @@ symbols pre-defined by the specific version of gas should be documented,
 but you can also get hints by using the compiler binary to "dump" the
 predefined symbols using "xxx-gcc -dM -E - </dev/null"
 
-#ifdef __AVR__
-#include "struct_gas_avr.S"
-#elif __MSP430__
-#include "struct_gas_msp430.S"
-#elif __x86_64__
-#include "struct_gas_x86.S"
-#elif __m68k__
-#include "struct_gas_m68k.S"
-#else
-#error No recognized Architecture for struct_gas.S
-#endif
+    #ifdef __AVR__
+    #include "struct_gas_avr.S"
+    #elif __MSP430__
+    #include "struct_gas_msp430.S"
+    #elif __x86_64__
+    #include "struct_gas_x86.S"
+    #elif __m68k__
+    #include "struct_gas_m68k.S"
+    #else
+    #error No recognized Architecture for struct_gas.S
+    #endif
 
 The main content of the cpu-specific files is a set of macros that define
 "cannonical" forms of all the available conditional jumps, and their
