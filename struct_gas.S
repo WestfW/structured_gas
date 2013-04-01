@@ -1,54 +1,9 @@
 /* struct_gas.S
  * Feb 2013 by Bill Westfield (westfw@westfw.info)
  * Structured Assembly macros for the Gnu assembler.
- * These permit the use of _if _else _endif without the use of explicit labels.
+ * These permit the use of conditionals ( _if _else _elseif _endif)
+ * and looping (_do _break _while _until) without the use of explicit labels.
  */
-
-/*
- *
-	
- * Based on PDP10 Macro macros that appeared at my highschool back in the
- * 1970s, published in some DEC10-related news media.  I don't even
- * remember the details.
- *	
- * Similar but more complex macros occur in DEC's MACSYM.MAC file,
- *  and struct.mac on DECUS decus/20-0143 by Robert Nix.
- *
- * Here are the original (macro-10) definitions that followed me from HS:
-	
-
-DEFINE %LOOP	<SAVCTR==SAVCTR+1
-		 %STNAM(SAV,\SAVCTR,.)>
-
-DEFINE LOOPER(INSTRC)
-<IRP INSTRC, <DEFINE %'INSTRC(AC) <INSTRC AC,<%GTNAM(SAV,\SAVCTR)>
-		SAVCTR==SAVCTR-1>>>
-
-LOOPER (<AOBJN,JRST,JUMPN,SOJG,SOJGE,SOJA,JUMPGE,AOJA>)
-
-DEFINE %IF
-<BEGCTR==BEGCTR+1
- JRST <%GTNAM(BEG,\BEGCTR)>
- SAVCTR==SAVCTR+1
- %STNAM(SAV,\SAVCTR,BEGCTR)>
-
-DEFINE %ELSE
-<%VAL==%GTNAM(SAV,\SAVCTR)
- BEGCTR==BEGCTR+1
- JRST <%GTNAM(BEG,\BEGCTR)>
- %STNAM(BEG,\%VAL,.)
- %STNAM(SAV,\SAVCTR,BEGCTR)>
-
-DEFINE %END
-<%VAL==%GTNAM(SAV,\SAVCTR)
- SAVCTR==SAVCTR-1
- %STNAM(BEG,\%VAL,.)>
-
-DEFINE %GTNAM(VAR,IND) <VAR'IND>
-
-DEFINE %STNAM(VAR,IND,VAL) <VAR'IND=VAL>
-
-*/
 	.nolist
 
 #ifdef __AVR__
@@ -70,16 +25,16 @@ DEFINE %STNAM(VAR,IND,VAL) <VAR'IND=VAL>
 ;;; brnCC 0f
 ;;;  if code
 ;;; rjmp 1f  ; else
-;;; 0:
+;;; 100:
 ;;;  else code
-;;; 0:
-;;; 1:	     ; endif
+;;; 100:
+;;; 101:	     ; endif
 ;;;
 ;;; When there is no else clause, this simplifies to:
 ;;; brnCC 0f
 ;;;  if code
-;;; 0:     ; endif
-;;; 1:
+;;; 100:     ; endif
+;;; 101:
 ;;;
 ;;; Because the local lables can be redefined, and the Nf form use as a jump
 ;;;  target jumps to the nearest label N, the start of the else and the endif

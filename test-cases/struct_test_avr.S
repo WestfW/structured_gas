@@ -51,6 +51,8 @@ IFELSEIFTEST:
 	   ldi r27, 'C'
 	_elseif <cpi r27, 'd'>, e
 	   ldi r27, 'D'
+	_else
+	   rcall dummyfunc
 	_endif
 
 DELAYTEST:
@@ -75,7 +77,7 @@ LOOPWBREAKTEST:
 	  inc r10
 	  _while always
 	ret
-	
+
 
 ;;; string length
 ;;; pointer entry in X, output in r10
