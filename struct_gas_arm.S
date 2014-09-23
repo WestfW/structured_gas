@@ -1,4 +1,4 @@
-;;; Structured asm macros for gnu assembler
+/* ;;; Structured asm macros for gnu assembler */
 
 /*
  * This section contains cpu-specific definitions that are dependent on the
@@ -19,26 +19,30 @@
 
 /*
  * define all of our conditional branches, "true" logic
+ * EQual, NotEqual, CarrySet, HigherorSame, CarryClear, LOwer, MInus, PLus,
+ * HIgher, LowerorSame, GreaterorEqual, LessThan, GreaterThan, LessorEqual,
+ * Overflow, NoOverflow
  */
-.irp cond, eq, ne, cs, hs,  cc, lo,  mi, pl, hi, ls, ge, lt, gt, le, vs, vc, al
+.irp cond, eq, ne, cs, hs,  cc, lo,  mi, pl, hi, ls, ge, lt, gt, le, vs, vc
 	.macro _st_jmp_\cond target
-	  b\cond\().n target
+	  b\cond\().n \target
 	.endm
 .endr
 	
 /*
  * Additional positive logic branches
+ * (Zero, Equal, NotZero)
  */
 .macro _st_jmp_z target
-	beq.n target
+	beq.n \target
 	.endm
 
 .macro _st_jmp_e target
-	beq.n target
+	beq.n \target
 	.endm
 	
 .macro _st_jmp_nz target
-	bne.n target
+	bne.n \target
 	.endm
 
 /*
@@ -46,16 +50,13 @@
  * that does a jump for "NOT x".
  */
 .macro _st_jmp_not_z target, dir
-	beq.n \target\dir
+	bne.n \target\dir
 	.endm
 .macro _st_jmp_not_nz target, dir
 	beq.n \target\dir
 	.endm
 .macro _st_jmp_not_e target, dir
 	bne.n \target\dir
-	.endm
-.macro _st_jmp_not_n target, dir
-	beq.n \target\dir
 	.endm
 .macro _st_jmp_not_eq target, dir
 	bne.n \target\dir
@@ -94,8 +95,10 @@
 	bvs.n \target\dir
 	.endm
 
-;;; allow _if skp after an instruction that might have skipped.
-;;; this assembles to an unconditional jump
+/*
+ * ;;; allow _if skp after an instruction that might have skipped.
+ * ;;; this assembles to an unconditional jump
+ */
 .macro	_st_jump_not_skp target, dir
 	b.n \target\dir
 	.endm
