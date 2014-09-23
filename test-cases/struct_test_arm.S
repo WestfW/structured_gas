@@ -1,6 +1,7 @@
 .include "struct_gas_arm.S"	
 .include "struct_gas.S"	
 /*	_struct_init */
+	.syntax unified
 	
 main:
 
@@ -39,17 +40,17 @@ NESTIFTEST:
 	_endif
 
 IFELSEIFTEST:
-	cpi r2, #'a'
+	cmp r2, #'a'
 	_if e
 	   mov r3,#'A'
-	_elseif <cpi r27, 'b'>, e
+	_elseif <cmp r2, #'b'>, e
 	   mov r3,#'B'
-	_elseif <cpi r27, 'c'>, e
+	_elseif <cmp r2, #'c'>, e
 	   mov r3,#'C'
-	_elseif <cpi r27, 'd'>, e
+	_elseif <cmp r2, #'d'>, e
 	   mov r3,#'D'
 	_else
-	   lr dummyfunc
+	   bl dummyfunc
 	_endif
 
 DELAYTEST:
@@ -63,30 +64,32 @@ DELAYTEST:
 	    _while nz
 	  subs r2, #1
 	  _while nz
-	ret
+	bx lr
 
 LOOPWBREAKTEST:
 	sub r1, r1
 	_do
-	  ldr r2, [r1] #1
+	  ldr r2, [r1], #1
 	  ands r2, r2
 	  _break e
 	  add r1, #1
 	  _while always
-	ret
+	bx lr
 
 
+/*	
 ;;; string length
 ;;; pointer entry in X, output in r10
-strlen: clr r2
-        _do			;Start of loop
+*/
+strlen: sub r2, r2
+        _do			/* Start of loop */
 	  _do
-	    subs r1, #1		;delay
+	    subs r1, #1		/* delay */
 	  _while ne
-          ld r3, [r2] #1
-          ands r17, r17		;check for end of string
+          ldr r3, [r2], #1
+          ands r4, r4		/* check for end of string */
 	_until z
-        ret
+	bx lr
 
 .if 0
 	.equ xl, r26
@@ -102,10 +105,10 @@ strcmp: push r17
 	  rjmp 2f
 1:	pop r18
 	pop r17
-	ret
+	bx lr
 1:
 2:	rjmp 0b
-#endif
+.endif
 
 dummyfunc:	bx lr
 
