@@ -20,6 +20,7 @@
 	
 .altmacro
 
+/*	
 ;;; We try to make use of the gnu assembler's "local labels.
 ;;; So an "if" statement ends up like:
 ;;; brnCC 0f
@@ -45,15 +46,18 @@
 ;;;   and an "endif" __ST_IFNEST and __ST_IFNEST+1
 ;;;  Another "if" adds two to __ST_IFNEST
 ;;; 
+*/	
 	
-;;; _st_mkjmp generate a jump to one of our defined local labels.
+/* _st_mkjmp generate a jump to one of our defined local labels. */
 .macro _st_mkjmp jmp, ind, dir, prefix=10
 	\jmp \prefix\ind\dir
 	.endm
 
+/*	
 ;;; _st_label
 ;;; define a local label here (at "."), depending on the counter "ind",
 ;;;   and optional prefix
+*/
 .macro _st_label ind, prefix=10
 \prefix\ind:	
 	.endm
@@ -74,9 +78,11 @@
 	_st_label %__ST_IFNEST
 	.endm
 	
+/*	
 ;;; elseif is annoying, because we want to jump around the clause
 ;;; (from the successful if clause immediately preceeding) before
 ;;; doing the test for the new condition.
+*/
 .macro _elseif ins, cond
 	_st_mkjmp _st_jmp_always, %__ST_IFNEST+1, f
 	_st_label %__ST_IFNEST
@@ -85,8 +91,10 @@
 	.endm
 
 
+/*
 ;;; Looping macros.  "until cc" will generate a jmp_not_cc backward,
 ;;; and "while cc" will generate a jmp_cc backward.
+*/
 .macro _do
 	.set __ST_LPNEST, __ST_LPNEST+2
 	_st_label %__ST_LPNEST, 20
@@ -108,7 +116,7 @@
 	_st_mkjmp _st_jmp_\cond, %(__ST_LPNEST+1), f, 20
 	.endm
 
-;;; Nesting level initialization
+/* Nesting level initialization */
 	.set __ST_IFNEST, -2
 	.set __ST_LPNEST, -2
 .list
