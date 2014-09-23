@@ -22,7 +22,7 @@
  */
 .irp cond, eq, ne, cs, cc, sh, lo, mi, pl, ge, lt, hs, hc, ts, tc, vs, vc, ie, id
 	.macro _st_jmp_\cond target
-	  br\cond target
+	  br\cond \target
 	.endm
 .endr
 	
@@ -30,15 +30,15 @@
  * Additional positive logic branches
  */
 .macro _st_jmp_z target
-	breq target
+	breq \target
 	.endm
 
 .macro _st_jmp_e target
-	breq target
+	breq \target
 	.endm
 	
 .macro _st_jmp_nz target
-	brne target
+	brne \target
 	.endm
 
 /*
