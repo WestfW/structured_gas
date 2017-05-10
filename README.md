@@ -1,6 +1,6 @@
-Structured Programming Macros For Gnu Asembler
+# Structured Programming Macros For Gnu Asembler
 
-Intro
+## Intro
 
 These macros implement standard Structured Programming code flow mechanisms
 for the Gnu Assembler ("gas").  Macros should expand to the minimum-sized
@@ -13,7 +13,7 @@ condiional branch opcode (so "_if z" will generate a "bnz" instruction.)
 "skp" and "always" are also defined to accomadate instructions that skip
 based on results, or unconditional branches.  ("_while always")
 
-Usage
+### Usage
 
 To use the structured programming macros, put a "#include <struct_gas.S>"
 at the beginning of your program, and use the gcc compiler front-end so that
@@ -28,9 +28,9 @@ _endif.  Loops are always started with "_do", but can be terminated with
 either "_while" or "_until."
 
 
-Individual Macro Descriptions
+### Individual Macro Descriptions
 
-_if cc
+**_if cc**
 
 If the specified condition code is not true, branch to the matching
 _else, _elseif, or _endif statement.
@@ -41,7 +41,7 @@ _else, _elseif, or _endif statement.
 	 call statprint		       call statprint
        _endif			    0: 1:
 
-_else
+**_else**
 
 Branch unconditioally to the matching _endif statement.  (Also serves as a
 target for _if branches.)
@@ -55,10 +55,10 @@ target for _if branches.)
        call statprint         	       call statprint
 
 
-_elseif <statement>, cc
+**_elseif \<statement\>, cc**
 
 Insert an unconditional branch to the matching _endif statement, then
-include <statement> in the code, followed by a conditional branch to the
+include \<statement\> in the code, followed by a conditional branch to the
 matching _else, _elseif, or _endif statment.  The start of "<statement>" is
 used as the target for the previous _if or _elseif statements.
 
@@ -78,23 +78,23 @@ used as the target for the previous _if or _elseif statements.
        _endif			      0: 1:
 
 
-_endif
+**_endif**
 
 Ends a conditional code block.  Used as a target for the matching
 _if/_else/_elseif statements.
 
 
 
-_do
+**_do**
 
 Defines the start of a loop.
 
 
-_break cc
+**_break cc**
 Branch out of the loop, past the closing _while or _until.
 
 
-_until cc
+**_until cc**
 
 Branch back to the beginning of the loop, if the condition is NOT true.
 
@@ -104,7 +104,7 @@ Branch back to the beginning of the loop, if the condition is NOT true.
        _until skp
 
 
-_while cc
+**_while cc**
 
 Branch back to the beginning of the loop, IF the connection is true.
 "_while always" creates an infinite loop.
@@ -116,7 +116,7 @@ Branch back to the beginning of the loop, IF the connection is true.
        _while always
 
 
-Notes and Limitations
+### Notes and Limitations
 
 The macro package uses C preprocessor macros (#if, #include) and uses
 predefined symbols defined by the C compiler (__AVR__) for selecting which
