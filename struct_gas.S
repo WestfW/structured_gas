@@ -4,7 +4,6 @@
  * These permit the use of conditionals ( _if _else _elseif _endif)
  * and looping (_do _break _while _until) without the use of explicit labels.
  */
-	.nolist
 
 #ifdef __AVR__
 #include "struct_gas_avr.S"
@@ -14,6 +13,8 @@
 #include "struct_gas_x86.S"
 #elif __m68k__
 #include "struct_gas_m68k.S"
+#elif __aarch64__
+#include "struct_gas_aarch64.S"
 #else
 #error No recognized Architecture for struct_gas.S
 #endif
@@ -119,4 +120,3 @@
 /* Nesting level initialization */
 	.set __ST_IFNEST, -2
 	.set __ST_LPNEST, -2
-.list
