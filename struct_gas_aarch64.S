@@ -88,6 +88,12 @@
 .macro _st_jmp_not_lt target, dir
 	b.ge \target\dir
 	.endm
+.macro _st_jmp_not_gt target, dir
+	b.le \target\dir
+	.endm
+.macro _st_jmp_not_le target, dir
+	b.gt \target\dir
+	.endm
 .macro _st_jmp_not_vs target, dir
 	b.vc \target\dir
 	.endm
