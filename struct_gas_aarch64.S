@@ -100,6 +100,12 @@
 .macro _st_jmp_not_vc target, dir
 	b.vs \target\dir
 	.endm
+.macro _st_jmp_not_hi target, dir
+	b.ls \target\dir
+	.endm
+.macro _st_jmp_not_ls target, dir
+	b.hi \target\dir
+	.endm
 
 /*
  * ;;; allow _if skp after an instruction that might have skipped.
