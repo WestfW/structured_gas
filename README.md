@@ -35,24 +35,24 @@ either "_while" or "_until."
 If the specified condition code is not true, branch to the matching
 _else, _elseif, or _endif statement.
 
-       cmp r1, r2                    cmp r1, r2
-       _if z			     jnz 0f
-         call args_equal	       call args_equal
-	 call statprint		       call statprint
-       _endif			    0: 1:
+    cmp r1, r2                    cmp r1, r2
+    _if z                         jnz 0f
+        call args_equal               call args_equal
+        call statprint                call statprint
+    _endif                        0: 1:
 
 **_else**
 
 Branch unconditioally to the matching _endif statement.  (Also serves as a
 target for _if branches.)
 
-       cmp r1, r2		     cmp r1, r2
-       _if z			     jnz 0f
-         call args_equal	       call args_equal
-       _else			     0: rjmp 1f
-         call args_NOTequal	       call args_NOTequal
-       _endif			     0: 1:
-       call statprint         	       call statprint
+    cmp r1, r2                    cmp r1, r2
+    _if z                         jnz 0f
+        call args_equal               call args_equal
+    _else                         0: rjmp 1f
+        call args_NOTequal            call args_NOTequal
+    _endif                        0: 1:
+    call statprint                    call statprint
 
 
 **_elseif \<statement\>, cc**
@@ -62,20 +62,20 @@ include \<statement\> in the code, followed by a conditional branch to the
 matching _else, _elseif, or _endif statment.  The start of "<statement>" is
 used as the target for the previous _if or _elseif statements.
 
-       cpi r16, 'a'		         cpi r16, 'a'
-       _if e			         jne 0f
-         call sub_for_a			   call sub_for_a
-       _elseif <cpi r16, 'b'>, e           rjmp 1f
-				      0: cpi r16, 'b'
-					 jne 0f
-         call sub_for_b		       	   call sub_for_b
-       _elseif <cpi r16, 'c'>, e       	   rjmp 1f
-				      0: cpi r16, 'c'
-					 jne 0f
-         call sub_for_c		       	   call sub_for_c
-       _else			           rjmp 1f
-         call badcmd		      0: call badcmd
-       _endif			      0: 1:
+        cpi r16, 'a'                        cpi r16, 'a'
+        _if e                               jne 0f
+            call sub_for_a                      call sub_for_a
+        _elseif <cpi r16, 'b'>, e               rjmp 1f
+                                        0:  cpi r16, 'b'
+                                            jne 0f
+        call sub_for_b                          call sub_for_b
+        _elseif <cpi r16, 'c'>, e               rjmp 1f
+                                        0:  cpi r16, 'c'
+                                            jne 0f
+        call sub_for_c                          call sub_for_c
+        _else                                   rjmp 1f
+            call badcmd                 0: call badcmd
+        _endif                          0: 1:
 
 
 **_endif**
@@ -98,22 +98,21 @@ Branch out of the loop, past the closing _while or _until.
 
 Branch back to the beginning of the loop, if the condition is NOT true.
 
-       _do
-         call movechar
-	 cpse r1, r2
-       _until skp
-
+    _do
+        call movechar
+        cpse r1, r2
+    _until skp
 
 **_while cc**
 
 Branch back to the beginning of the loop, IF the connection is true.
 "_while always" creates an infinite loop.
 
-       _do
-         cpi r16, 16
-	 _break lt
-	 call moveit
-       _while always
+    _do
+        cpi r16, 16
+        _break lt
+        call moveit
+    _while always
 
 
 ### Notes and Limitations
