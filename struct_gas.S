@@ -87,7 +87,7 @@
 .macro _elseif ins, cond
 	_st_mkjmp _st_jmp_always, %__ST_IFNEST+1, f
 	_st_label %__ST_IFNEST
-	ins
+	\ins
 	_st_mkjmp _st_jmp_not_\cond, %__ST_IFNEST, f
 	.endm
 
