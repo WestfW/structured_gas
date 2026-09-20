@@ -46,13 +46,14 @@ _else, _elseif, or _endif statement.
 Branch unconditioally to the matching _endif statement.  (Also serves as a
 target for _if branches.)
 
-    cmp r1, r2                    cmp r1, r2
-    _if z                         jnz 0f
-        call args_equal               call args_equal
-    _else                         0: rjmp 1f
-        call args_NOTequal            call args_NOTequal
-    _endif                        0: 1:
-    call statprint                    call statprint
+    cmp r1, r2                       cmp r1, r2
+    _if z                       *    jnz 0f
+        call args_equal                  call args_equal
+    _else                       *        rjmp 1f
+                                * 0:
+        call args_NOTequal               call args_NOTequal
+    _endif                      * 0: 1:
+    call statprint                   call statprint
 
 
 **_elseif \<statement\>, cc**
